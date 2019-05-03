@@ -54,15 +54,23 @@ function buildCharts(sample) {
     var bubbleData = [bubbleTrace];
     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
-    var sortedValues = sampleData.sample_values.sort(function compareFunction(first, second) {
-      return second - first;
+    var pieSamples = [];
+
+    for (var i = 0; i < sampleData.sample_values.length; i++){
+      pieSamples.push({'id': sampleData.otu_ids[i], 'value': sampleData.sample_values[i], 'label': sampleData.otu_labels[i]})
+    };
+
+    pieSamples.sort(function (first, second){
+      return(first.value - second.value)
     });
-    var topTenValues = sortedValues.slice(0,10);
+
+    var topTenValues = pieSamples.slice(0,10);
+
     var pieTrace = {
       type: 'pie',
-      values: topTenValues,
-      labels: sampleData.otu_ids,
-      hovertext: sampleData.otu_labels
+      values: topTenValues.map(d => d.value),
+      labels: topTenValues.map(d => d.id),
+      text: topTenValues.map(d => d.label)
     };
     var pieData = [pieTrace];
     Plotly.newPlot("pie", pieData);
