@@ -61,7 +61,7 @@ function buildCharts(sample) {
     };
 
     pieSamples.sort(function (first, second){
-      return(first.value - second.value)
+      return(second.value - first.value)
     });
 
     var topTenValues = pieSamples.slice(0,10);
@@ -70,7 +70,9 @@ function buildCharts(sample) {
       type: 'pie',
       values: topTenValues.map(d => d.value),
       labels: topTenValues.map(d => d.id),
-      text: topTenValues.map(d => d.label)
+      text: topTenValues.map(d => d.label),
+      hoverinfo: 'text',
+      textinfo: 'percent'
     };
     var pieData = [pieTrace];
     Plotly.newPlot("pie", pieData);
